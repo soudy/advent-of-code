@@ -56,7 +56,7 @@ start(File) ->
 main([File]) ->
     start(File);
 main([]) ->
-    start("./input");
+    start(filename:join(filename:dirname(escript:script_name()), "input"));
 main(_) ->
     usage().
 
