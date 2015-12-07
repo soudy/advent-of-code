@@ -17,19 +17,36 @@
 % causes him to enter the basement (floor -1). The first character in the
 % instructions has position 1, the second character has position 2, and so on.
 
+% Part One
 get_floor_level(L) ->
     get_floor_level(L, 0).
-get_floor_level(<<H,T/binary>>, N) ->
+get_floor_level(<<H,T/binary>>, Floor) ->
     case H of
-        $( -> get_floor_level(T, N + 1);
-        $) -> get_floor_level(T, N - 1);
-        _  -> N
-    end.
+        $( -> get_floor_level(T, Floor + 1);
+        $) -> get_floor_level(T, Floor - 1);
+        _  -> error
+    end;
+get_floor_level(<<>>, Floor) ->
+    Floor.
+
+% Part Two
+find_basement(L) ->
+    find_basement(L, 0, 0).
+find_basement(_, -1, Count) ->
+	Count;
+find_basement(<<H,T/binary>>, Floor, Count) ->
+	case H of
+		$( -> find_basement(T, Floor + 1, Count + 1);
+		$) -> find_basement(T, Floor - 1, Count + 1);
+        _  -> error
+	end.
 
 start(File) ->
     case file:read_file(File) of
         {ok, Fd} ->
-            io:fwrite("Solution 1: ~b~n", [get_floor_level(Fd)]),
+            Contents = binary:replace(Fd, <<"\n">>, <<>>),
+            io:fwrite("Solution 1: ~p~n", [get_floor_level(Contents)]),
+            io:fwrite("Solution 2: ~p~n", [find_basement(Contents)]),
             file:close(Fd);
         {error, Reason} ->
             io:fwrite("Something went wrong: ~s~n", [Reason]),
@@ -39,7 +56,7 @@ start(File) ->
 main([File]) ->
     start(File);
 main([]) ->
-    start("./input/day1");
+    start("./input");
 main(_) ->
     usage().
 
