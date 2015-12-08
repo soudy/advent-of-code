@@ -1,4 +1,5 @@
 #! /usr/bin/env escript
+%% -*- erlang -*-
 
 % -- Part One --
 % The elves are running low on wrapping paper, and so they need to submit an
@@ -32,12 +33,12 @@
 parse_dimensions(Dimensions) ->
     case re:run(Dimensions, "^\\d+x\\d+x\\d+$") of
         {match, _} ->
-            {match, list_to_tuple(
-                     lists:map(fun(X) ->
-                                       {Int, _} = string:to_integer(X), Int
-                               end,
-                               re:split(Dimensions, "x", [{return, list}]))
-                    )};
+            list_to_tuple(
+              lists:map(fun(X) ->
+                            {Int, _} = string:to_integer(X), Int
+                        end,
+                        re:split(Dimensions, "x", [{return, list}]))
+             );
         _ ->
             error
     end.
@@ -45,9 +46,18 @@ parse_dimensions(Dimensions) ->
 % Part One
 rect_surface_area(Dimensions) ->
     case parse_dimensions(Dimensions) of
-        {match, {L, W, H}} ->
+        {L, W, H} ->
             Slack = lists:min([L * W, L * H, W * H]),
             (2 * L * W + 2 * W * H + 2 * H * L) + Slack;
+        _ ->
+            error
+    end.
+
+% Part Two
+ribbon_surface_area(Dimensions) ->
+    case parse_dimensions(Dimensions) of
+        {L, W, H} ->
+            L * W * H;
         _ ->
             error
     end.
@@ -57,9 +67,13 @@ start(File) ->
         {ok, Fd} ->
             Lines = binary:split(Fd, <<"\n">>, [global, trim_all]),
             PaperSqFeet = lists:sum(lists:map(fun(X) ->
-                                                      rect_surface_area(X)
+                                                rect_surface_area(X)
                                               end, Lines)),
+            RibbonSqFeet = lists:sum(lists:map(fun(X) ->
+                                                ribbon_surface_area(X)
+                                               end, Lines)),
             io:fwrite("Solution 1: ~p~n", [PaperSqFeet]),
+            io:fwrite("Solution 2: ~p~n", [RibbonSqFeet]),
             file:close(Fd);
         {error, Reason} ->
             io:fwrite("Something went wrong: ~s~n", [Reason]),
