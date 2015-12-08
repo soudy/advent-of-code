@@ -34,11 +34,11 @@ find_basement(L) ->
 find_basement(_, -1, Count) ->
 	Count;
 find_basement(<<H,T/binary>>, Floor, Count) ->
-	case H of
-		$( -> find_basement(T, Floor + 1, Count + 1);
-		$) -> find_basement(T, Floor - 1, Count + 1);
+    case H of
+        $( -> find_basement(T, Floor + 1, Count + 1);
+        $) -> find_basement(T, Floor - 1, Count + 1);
         _  -> error
-	end.
+    end.
 
 start(File) ->
     case file:read_file(File) of
