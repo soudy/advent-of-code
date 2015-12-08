@@ -1,5 +1,4 @@
 #! /usr/bin/env escript
-%% -*- erlang -*-
 
 %%% -- Part One --
 %%% Santa is trying to deliver presents in a large apartment building, but he can't

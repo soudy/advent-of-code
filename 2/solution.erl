@@ -1,5 +1,4 @@
 #! /usr/bin/env escript
-%% -*- erlang -*-
 
 %%% -- Part One --
 %%% The elves are running low on wrapping paper, and so they need to submit an
@@ -57,6 +56,7 @@ rect_surface_area(Dimensions) ->
 ribbon_surface_area(Dimensions) ->
     case parse_dimensions(Dimensions) of
         {L, W, H} ->
+            % FIXME: this is kind of ugly, find a better way to do this
             Addition = lists:sum(lists:sublist(lists:sort([L, W, H]), 2)) * 2,
             L * W * H + Addition;
         _ ->
