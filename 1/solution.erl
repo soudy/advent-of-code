@@ -23,7 +23,7 @@ get_floor_level(<<H,T/binary>>, Floor) ->
     case H of
         $( -> get_floor_level(T, Floor + 1);
         $) -> get_floor_level(T, Floor - 1);
-        _  -> error
+        _  -> get_floor_level(T, Floor)
     end;
 get_floor_level(<<>>, Floor) ->
     Floor.
@@ -43,9 +43,8 @@ find_basement(<<H,T/binary>>, Floor, Count) ->
 start(File) ->
     case file:read_file(File) of
         {ok, Fd} ->
-            Contents = binary:replace(Fd, <<"\n">>, <<>>),
-            io:fwrite("Solution 1: ~p~n", [get_floor_level(Contents)]),
-            io:fwrite("Solution 2: ~p~n", [find_basement(Contents)]),
+            io:fwrite("Solution 1: ~p~n", [get_floor_level(Fd)]),
+            io:fwrite("Solution 2: ~p~n", [find_basement(Fd)]),
             file:close(Fd);
         {error, Reason} ->
             io:fwrite("Something went wrong: ~s~n", [Reason]),

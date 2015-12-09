@@ -22,7 +22,7 @@ deliver_presents(<<H,T/binary>>, X, Y, Houses) ->
         $v -> deliver_presents(T, X, Y - 1, NewHouses);
         $< -> deliver_presents(T, X - 1, Y, NewHouses);
         $> -> deliver_presents(T, X + 1, Y, NewHouses);
-        _  -> error
+        _  -> deliver_presents(T, X, Y, Houses)
     end;
 deliver_presents(<<>>, _, _, Houses) ->
     sets:size(Houses).
@@ -30,8 +30,7 @@ deliver_presents(<<>>, _, _, Houses) ->
 start(File) ->
     case file:read_file(File) of
         {ok, Fd} ->
-            Contents = binary:replace(Fd, <<"\n">>, <<>>),
-            io:fwrite("Solution 1: ~p~n", [deliver_presents(Contents)]),
+            io:fwrite("Solution 1: ~p~n", [deliver_presents(Fd)]),
             file:close(Fd);
         {error, Reason} ->
             io:fwrite("Something went wrong: ~s~n", [Reason]),
