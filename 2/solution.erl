@@ -33,7 +33,7 @@ parse_dimensions(Dimensions) ->
     case re:run(Dimensions, "^\\d+x\\d+x\\d+$") of
         {match, _} ->
             list_to_tuple(
-              lists:map(fun(X) ->
+                lists:map(fun(X) ->
                             {Int, _} = string:to_integer(X), Int
                         end,
                         re:split(Dimensions, "x", [{return, list}]))
