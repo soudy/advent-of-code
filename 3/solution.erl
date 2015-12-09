@@ -16,11 +16,13 @@
 deliver_presents(Pattern) ->
     deliver_presents(Pattern, 0, 0, sets:new()).
 deliver_presents(<<H,T/binary>>, X, Y, Houses) ->
+    NewHouses = sets:add_element({X, Y}, Houses),
     case H of
-        $^ -> deliver_presents(T, X, Y + 1, sets:add_element({X, Y}, Houses));
-        $v -> deliver_presents(T, X, Y - 1, sets:add_element({X, Y}, Houses));
-        $< -> deliver_presents(T, X - 1, Y, sets:add_element({X, Y}, Houses));
-        $> -> deliver_presents(T, X + 1, Y, sets:add_element({X, Y}, Houses))
+        $^ -> deliver_presents(T, X, Y + 1, NewHouses);
+        $v -> deliver_presents(T, X, Y - 1, NewHouses);
+        $< -> deliver_presents(T, X - 1, Y, NewHouses);
+        $> -> deliver_presents(T, X + 1, Y, NewHouses);
+        _  -> error
     end;
 deliver_presents(<<>>, _, _, Houses) ->
     sets:size(Houses).
