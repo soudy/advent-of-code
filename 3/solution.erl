@@ -25,12 +25,12 @@ deliver_presents(<<H,T/binary>>, X, Y, Houses) ->
         _  -> deliver_presents(T, X, Y, Houses)
     end;
 deliver_presents(<<>>, _, _, Houses) ->
-    sets:size(Houses).
+    Houses.
 
 start(File) ->
     case file:read_file(File) of
         {ok, Fd} ->
-            io:fwrite("Solution 1: ~p~n", [deliver_presents(Fd)]),
+            io:fwrite("Solution 1: ~p~n", [sets:size(deliver_presents(Fd))]),
             file:close(Fd);
         {error, Reason} ->
             io:fwrite("Something went wrong: ~s~n", [Reason]),

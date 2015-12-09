@@ -35,8 +35,8 @@ parse_dimensions(Dimensions) ->
             list_to_tuple(
                 lists:map(fun(X) ->
                             {Int, _} = string:to_integer(X), Int
-                        end,
-                        re:split(Dimensions, "x", [{return, list}]))
+                          end,
+                          re:split(Dimensions, "x", [{return, list}]))
              );
         _ ->
             error
