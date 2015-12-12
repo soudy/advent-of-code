@@ -25,9 +25,8 @@
 %%% - It contains at least one letter which repeats with exactly one letter
 %%%   between them, like xyx, abcdefeghi (efe), or even aaa.
 
-
 -module(day5).
--export([main/0]).
+-export([main/0, is_nice_one/1, is_nice_two/1]).
 
 main() ->
     {ok, Fd} = file:read_file("./input"),
@@ -37,10 +36,10 @@ main() ->
     io:fwrite("Part 2: ~p~n", [part2(Lines)]).
 
 part1(Lines) ->
-    length(lists:filtermap(fun(X) -> is_nice_one(X) end, Lines)).
+    length(lists:filtermap(fun day5:is_nice_one/1, Lines)).
 
 part2(Lines) ->
-    length(lists:filtermap(fun(X) -> is_nice_two(X) end, Lines)).
+    length(lists:filtermap(fun day5:is_nice_two/1, Lines)).
 
 is_nice_one(L) ->
     (num_vowels(L) >= 3) and appears_twice(L) and not has_evil_string(L).
