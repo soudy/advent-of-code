@@ -7,6 +7,5 @@ Each puzzle calls upon different skills and has two parts that build on a theme.
 For more information see http://adventofcode.com/.
 
 This repository contains my solutions, written in Erlang. Each folder contains
-the Erlang script and the input file. The scripts should be interpreted using
-`escript` (Erlang's interpreter). These scripts use the input file in their
-directory by default, but can take a filename as first argument.
+the Erlang file and the input file. It will use the input found in the input
+file.

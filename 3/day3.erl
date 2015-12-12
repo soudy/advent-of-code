@@ -1,5 +1,3 @@
-#! /usr/bin/env escript
-
 %%% -- Part One --
 %%% Santa is delivering presents to an infinite two-dimensional grid of houses.
 %%%
@@ -24,10 +22,21 @@
 %%%
 %%% This year, how many houses receive at least one present?
 
-%% Part One
+-module(day3).
+-export([main/0, part1/1, part2/1]).
+
+main() ->
+    {ok, Fd} = file:read_file("./input"),
+    file:close(Fd),
+    io:fwrite("Solution 1: ~p~n", [part1(Fd)]),
+    io:fwrite("Solution 2: ~p~n", [part2(Fd)]).
+
+part1(Fd) -> sets:size(deliver_presents(Fd)).
+part2(Fd) -> deliver_robo_presents(Fd).
+
 deliver_presents(Pattern) ->
     deliver_presents(Pattern, 0, 0, sets:new()).
-deliver_presents(<<H,T/binary>>, X, Y, Houses) ->
+deliver_presents(<<H, T/binary>>, X, Y, Houses) ->
     NewHouses = sets:add_element({X, Y}, Houses),
     case H of
         $^ -> deliver_presents(T, X, Y + 1, NewHouses);
@@ -39,9 +48,11 @@ deliver_presents(<<H,T/binary>>, X, Y, Houses) ->
 deliver_presents(<<>>, _, _, Houses) ->
     Houses.
 
-%% Part Two
+deliver_robo_presents(Pattern) ->
+    {Santa, Robo} = binary_split_odds(Pattern),
+    sets:size(sets:union(deliver_presents(Santa), deliver_presents(Robo))).
 
-%% Splits a binary into a tuple by each odd and each even value, so we get 2
+%% Splits a list into a tuple by each odd and each even value, so we get 2
 %% paths: Santa's and Robot Santa's path
 binary_split_odds(Input) ->
     binary_split_odds(Input, <<>>, <<>>).
@@ -51,28 +62,3 @@ binary_split_odds(<<H,T/binary>>, L, R) ->
     binary_split_odds(T, L, <<R/binary, <<H>>/binary>>);
 binary_split_odds(<<>>, L, R) ->
     {L, R}.
-
-deliver_robo_presents(Pattern) ->
-    {Santa, Robo} = binary_split_odds(Pattern),
-    sets:size(sets:union(deliver_presents(Santa), deliver_presents(Robo))).
-
-start(File) ->
-    case file:read_file(File) of
-        {ok, Fd} ->
-            io:fwrite("Solution 1: ~p~n", [sets:size(deliver_presents(Fd))]),
-            io:fwrite("Solution 2: ~p~n", [deliver_robo_presents(Fd)]),
-            file:close(Fd);
-        {error, Reason} ->
-            io:fwrite("Something went wrong: ~s~n", [Reason]),
-            usage()
-    end.
-
-main([File]) ->
-    start(File);
-main([]) ->
-    start(filename:join(filename:dirname(escript:script_name()), "input"));
-main(_) ->
-    usage().
-
-usage() ->
-    io:fwrite("Usage: ~s [input-file]~n", [escript:script_name()]).

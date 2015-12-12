@@ -15,9 +15,10 @@
 -export([main/0, part1/1, part2/1]).
 
 main() ->
-    Contents = io:get_line("Input> ") -- "\n",
-    io:fwrite("Part 1: ~p~n", [part1(Contents)]),
-    io:fwrite("Part 2: ~p~n", [part2(Contents)]).
+    {ok, Fd} = file:read_file("./input"),
+    file:close(Fd),
+    io:fwrite("Part 1: ~p~n", [part1(Fd)]),
+    io:fwrite("Part 2: ~p~n", [part2(Fd)]).
 
 part1(Contents) -> mine_advent_coins(Contents, "00000").
 part2(Contents) -> mine_advent_coins(Contents, "000000").
@@ -40,6 +41,6 @@ int_to_hex(N) when N < 256 ->
 	[hex(N div 16), hex(N rem 16)].
 
 hex(N) when N < 10 ->
-	$0+N;
+	$0 + N;
 hex(N) when N >= 10, N < 16 ->
 	$a + (N - 10).

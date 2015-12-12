@@ -1,5 +1,3 @@
-#! /usr/bin/env escript
-
 %%% -- Part One --
 %%% The elves are running low on wrapping paper, and so they need to submit an
 %%% order for more. They have a list of the dimensions (length l, width w, and
@@ -15,8 +13,7 @@
 %%% All numbers in the elves' list are in feet. How many total square feet of
 %%% wrapping paper should they order?
 %%%
-%%% --- Part Two ---
-%%%
+%%% -- Part Two --
 %%% The elves are also running low on ribbon. Ribbon is all the same width, so
 %%% they only have to worry about the length they need to order, which they would
 %%% again like to be exact.
@@ -28,6 +25,40 @@
 %%% tie the bow, though; they'll never tell.
 %%%
 %%% How many total feet of ribbon should they order?
+
+-module(day2).
+-export([main/0, part1/1, part2/1]).
+
+main() ->
+    {ok, Fd} = file:read_file("./input"),
+    Lines = binary:split(Fd, <<"\n">>, [global, trim_all]),
+    file:close(Fd),
+    io:fwrite("Part 1: ~p~n", [part1(Lines)]),
+    io:fwrite("Part 2: ~p~n", [part2(Lines)]).
+
+part1(Lines) ->
+    lists:sum(lists:map(fun(X) -> rect_surface_area(X) end, Lines)).
+part2(Lines) ->
+    lists:sum(lists:map(fun(X) -> ribbon_surface_area(X) end, Lines)).
+
+rect_surface_area(Dimensions) ->
+    case parse_dimensions(Dimensions) of
+        {L, W, H} ->
+            Slack = lists:min([L * W, L * H, W * H]),
+            (2 * L * W + 2 * W * H + 2 * H * L) + Slack;
+        _ ->
+            error
+    end.
+
+ribbon_surface_area(Dimensions) ->
+    case parse_dimensions(Dimensions) of
+        {L, W, H} ->
+            % FIXME: this is kind of ugly, find a better way to do this
+            Addition = lists:sum(lists:sublist(lists:sort([L, W, H]), 2)) * 2,
+            L * W * H + Addition;
+        _ ->
+            error
+    end.
 
 parse_dimensions(Dimensions) ->
     case re:run(Dimensions, "^\\d+x\\d+x\\d+$") of
@@ -41,52 +72,3 @@ parse_dimensions(Dimensions) ->
         _ ->
             error
     end.
-
-%% Part One
-rect_surface_area(Dimensions) ->
-    case parse_dimensions(Dimensions) of
-        {L, W, H} ->
-            Slack = lists:min([L * W, L * H, W * H]),
-            (2 * L * W + 2 * W * H + 2 * H * L) + Slack;
-        _ ->
-            error
-    end.
-
-%% Part Two
-ribbon_surface_area(Dimensions) ->
-    case parse_dimensions(Dimensions) of
-        {L, W, H} ->
-            % FIXME: this is kind of ugly, find a better way to do this
-            Addition = lists:sum(lists:sublist(lists:sort([L, W, H]), 2)) * 2,
-            L * W * H + Addition;
-        _ ->
-            error
-    end.
-
-start(File) ->
-    case file:read_file(File) of
-        {ok, Fd} ->
-            Lines = binary:split(Fd, <<"\n">>, [global, trim_all]),
-            PaperSqFeet = lists:sum(lists:map(fun(X) ->
-                                                rect_surface_area(X)
-                                              end, Lines)),
-            RibbonSqFeet = lists:sum(lists:map(fun(X) ->
-                                                ribbon_surface_area(X)
-                                               end, Lines)),
-            io:fwrite("Solution 1: ~p~n", [PaperSqFeet]),
-            io:fwrite("Solution 2: ~p~n", [RibbonSqFeet]),
-            file:close(Fd);
-        {error, Reason} ->
-            io:fwrite("Something went wrong: ~s~n", [Reason]),
-            usage()
-    end.
-
-main([File]) ->
-    start(File);
-main([]) ->
-    start(filename:join(filename:dirname(escript:script_name()), "input"));
-main(_) ->
-    usage().
-
-usage() ->
-    io:fwrite("Usage: ~s [input-file]~n", [escript:script_name()]).
