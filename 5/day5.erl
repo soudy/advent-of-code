@@ -26,7 +26,7 @@
 %%%   between them, like xyx, abcdefeghi (efe), or even aaa.
 
 -module(day5).
--export([main/0, is_nice_one/1, is_nice_two/1]).
+-export([main/0, is_nice_one/1, is_nice_two/1, part1/1, part2/1]).
 
 main() ->
     {ok, Fd} = file:read_file("./input"),
