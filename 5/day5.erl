@@ -48,32 +48,21 @@ is_nice_one(L) ->
 is_nice_two(L) ->
     letter_inbetween(L) and repeating_pair(L).
 
+%% part one rules
 num_vowels(L) ->
     case re:run(L, "[aeuio]", [global]) of
         {match, Matches} -> length(Matches);
         nomatch          -> 0
     end.
+has_evil_string(L) -> re_bool(L, "(ab|cd|pq|xy)").
+appears_twice(L) -> re_bool(L, "([a-z])\\1").
 
-has_evil_string(L) ->
-    case re:run(L, "(ab|cd|pq|xy)", [global]) of
-        {match, _} -> true;
-        nomatch    -> false
-    end.
+%% part two rules
+letter_inbetween(L) -> re_bool(L, "([a-z])[a-z]\\1").
+repeating_pair(L) -> re_bool(L, "([a-z][a-z]).*\\1").
 
-appears_twice(L) ->
-    case re:run(L, "([a-z])\\1", [global]) of
-        {match, _} -> true;
-        nomatch    -> false
-    end.
-
-letter_inbetween(L) ->
-    case re:run(L, "([a-z])[a-z]\\1", [global]) of
-        {match, _} -> true;
-        nomatch    -> false
-    end.
-
-repeating_pair(L) ->
-    case re:run(L, "([a-z][a-z]).*\\1", [global]) of
+re_bool(L, Pattern) ->
+    case re:run(L, Pattern, [global]) of
         {match, _} -> true;
         nomatch    -> false
     end.
