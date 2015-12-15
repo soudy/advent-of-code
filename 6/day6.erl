@@ -23,23 +23,21 @@ main() ->
     io:fwrite("Part 1: ~p~n", [part1(Instructions)]).
 
 part1(Instructions) ->
-    maps:size(maps:filter(fun(_, Value) -> Value =:= on end,
-                          parse_instructions(Instructions))).
+    maps:size(parse_instructions(Instructions)).
 
 parse_instructions(Instructions) ->
     parse_instructions(Instructions, maps:new()).
-parse_instructions([H|T], Map) ->
-    [Keyword|Args] = string:tokens(binary_to_list(H), " ,"),
-    case Keyword of
-        "turn"   ->
-            parse_instructions(T, switch_lights(lists:nth(1, Args),
-                                                parse_range(lists:nthtail(1, Args)),
-                                                Map));
-        "toggle" ->
-            parse_instructions(T, toggle_lights(parse_range(Args), Map))
+parse_instructions([H|T], Lights) ->
+    case string:tokens(binary_to_list(H), " ,") of
+        ["turn"|Rest] ->
+            parse_instructions(T, switch_lights(lists:nth(1, Rest),
+                                                parse_range(lists:nthtail(1, Rest)),
+                                                Lights));
+        ["toggle"|Rest] ->
+            parse_instructions(T, toggle_lights(parse_range(Rest), Lights))
     end;
-parse_instructions([], Map) ->
-    Map.
+parse_instructions([], Lights) ->
+    Lights.
 
 parse_range(Instruction) ->
     X1 = list_to_integer(lists:nth(1, Instruction)),
@@ -48,18 +46,18 @@ parse_range(Instruction) ->
     Y2 = list_to_integer(lists:nth(5, Instruction)),
     [{X, Y} || X <- lists:seq(X1, Y1), Y <- lists:seq(X2, Y2)].
 
-toggle_lights([H|T], Map) ->
-    case maps:get(H, Map, off) of
-        on  -> toggle_lights(T, maps:put(H, off, Map));
-        off -> toggle_lights(T, maps:put(H, on, Map))
+toggle_lights([H|T], Lights) ->
+    case maps:get(H, Lights, off) of
+        on  -> toggle_lights(T, maps:remove(H, Lights));
+        off -> toggle_lights(T, maps:put(H, on, Lights))
     end;
-toggle_lights([], Map) ->
-    Map.
+toggle_lights([], Lights) ->
+    Lights.
 
-switch_lights(Status, [H|T], Map) ->
+switch_lights(Status, [H|T], Lights) ->
     case Status of
-        "on"  -> switch_lights(Status, T, maps:put(H, on, Map));
-        "off" -> switch_lights(Status, T, maps:put(H, off, Map))
+        "on"  -> switch_lights(Status, T, maps:put(H, on, Lights));
+        "off" -> switch_lights(Status, T, maps:remove(H, Lights))
     end;
-switch_lights(_, [], Map) ->
-    Map.
+switch_lights(_, [], Lights) ->
+    Lights.
