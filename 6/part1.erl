@@ -1,4 +1,3 @@
-%%% -- Part One --
 %%% Because your neighbors keep defeating you in the holiday house decorating
 %%% contest year after year, you've decided to deploy one million lights in a
 %%% 1000x1000 grid.
@@ -13,17 +12,14 @@
 %%% of a rectangle, inclusive; a coordinate pair like 0,0 through 2,2 therefore
 %%% refers to 9 lights in a 3x3 square. The lights all start turned off.
 
--module(day6).
--export([main/0, part1/1]).
+-module(part1).
+-export([main/0]).
 
 main() ->
     {ok, Fd} = file:read_file("./input"),
     Instructions = binary:split(Fd, <<"\n">>, [global, trim_all]),
     file:close(Fd),
-    io:fwrite("Part 1: ~p~n", [part1(Instructions)]).
-
-part1(Instructions) ->
-    maps:size(parse_instructions(Instructions)).
+    io:fwrite("Part 1: ~p~n", [parse_instructions(Instructions)]).
 
 parse_instructions(Instructions) ->
     parse_instructions(Instructions, maps:new()).

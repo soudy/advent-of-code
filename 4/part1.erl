@@ -1,4 +1,3 @@
-%%% -- Part One --
 %%% Santa needs help mining some AdventCoins (very similar to bitcoins) to use
 %%% as gifts for all the economically forward-thinking little girls and boys.
 %%%
@@ -7,21 +6,15 @@
 %%% input, given below) followed by a number in decimal. To mine AdventCoins,
 %%% you must find Santa the lowest positive number (no leading zeroes: 1, 2, 3,
 %%% ...) that produces such a hash.
-%%%
-%%% -- Part Two --
-%%% Now find one that starts with six zeroes.
 
--module(day4).
--export([main/0, part1/1, part2/1]).
+-module(part1).
+-export([main/0, mine_advent_coins/2]).
 
 main() ->
     {ok, Fd} = file:read_file("./input"),
+    Contents = binary:replace(Fd, <<"\n">>, <<>>),
     file:close(Fd),
-    io:fwrite("Part 1: ~p~n", [part1(Fd)]),
-    io:fwrite("Part 2: ~p~n", [part2(Fd)]).
-
-part1(Contents) -> mine_advent_coins(Contents, "00000").
-part2(Contents) -> mine_advent_coins(Contents, "000000").
+    io:fwrite("Part 1: ~p~n", [mine_advent_coins(Contents, "00000")]).
 
 mine_advent_coins(Input, Match) ->
     mine_advent_coins(Input, 1, Match).
