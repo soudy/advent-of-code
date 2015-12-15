@@ -19,21 +19,21 @@ main() ->
     {ok, Fd} = file:read_file("./input"),
     Instructions = binary:split(Fd, <<"\n">>, [global, trim_all]),
     file:close(Fd),
-    io:fwrite("Part 1: ~p~n", [parse_instructions(Instructions)]).
+    io:fwrite("Part 1: ~p~n", [count_lights(Instructions)]).
 
-parse_instructions(Instructions) ->
-    parse_instructions(Instructions, maps:new()).
-parse_instructions([H|T], Lights) ->
+count_lights(Instructions) ->
+    count_lights(Instructions, maps:new()).
+count_lights([H|T], Lights) ->
     case string:tokens(binary_to_list(H), " ,") of
         ["turn"|Rest] ->
-            parse_instructions(T, switch_lights(lists:nth(1, Rest),
+            count_lights(T, switch_lights(lists:nth(1, Rest),
                                                 parse_range(lists:nthtail(1, Rest)),
                                                 Lights));
         ["toggle"|Rest] ->
-            parse_instructions(T, toggle_lights(parse_range(Rest), Lights))
+            count_lights(T, toggle_lights(parse_range(Rest), Lights))
     end;
-parse_instructions([], Lights) ->
-    Lights.
+count_lights([], Lights) ->
+    maps:size(Lights).
 
 parse_range(Instruction) ->
     X1 = list_to_integer(lists:nth(1, Instruction)),
