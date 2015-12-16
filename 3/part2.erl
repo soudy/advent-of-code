@@ -11,8 +11,6 @@
 -module(part2).
 -export([main/0]).
 
--import(part1, [deliver_presents/1]).
-
 main() ->
     {ok, Fd} = file:read_file("./input"),
     io:fwrite("Part 2: ~p~n", [deliver_robo_presents(Fd)]),

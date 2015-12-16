@@ -13,8 +13,6 @@
 -module(part2).
 -export([main/0]).
 
--import(part1, [parse_dimensions/1]).
-
 main() ->
     {ok, Fd} = file:read_file("./input"),
     Lines = binary:split(Fd, <<"\n">>, [global, trim_all]),

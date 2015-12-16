@@ -13,8 +13,6 @@
 -module(part2).
 -export([main/0, is_nice/1]).
 
--import(part1, [re_bool/2]).
-
 main() ->
     {ok, Fd} = file:read_file("./input"),
     Lines = binary:split(Fd, <<"\n">>, [global, trim_all]),
@@ -27,5 +25,5 @@ nice_string_len(Lines) ->
 is_nice(L) ->
     letter_inbetween(L) and repeating_pair(L).
 
-letter_inbetween(L) -> re_bool(L, "([a-z])[a-z]\\1").
-repeating_pair(L) -> re_bool(L, "([a-z][a-z]).*\\1").
+letter_inbetween(L) -> part1:re_bool(L, "([a-z])[a-z]\\1").
+repeating_pair(L) -> part1:re_bool(L, "([a-z][a-z]).*\\1").

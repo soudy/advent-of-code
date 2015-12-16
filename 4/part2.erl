@@ -3,8 +3,6 @@
 -module(part2).
 -export([main/0]).
 
--import(part1, [mine_advent_coins/2]).
-
 main() ->
     {ok, Fd} = file:read_file("./input"),
     Contents = binary:replace(Fd, <<"\n">>, <<>>),
