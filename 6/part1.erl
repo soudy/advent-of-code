@@ -13,7 +13,7 @@
 %%% refers to 9 lights in a 3x3 square. The lights all start turned off.
 
 -module(part1).
--export([main/0]).
+-export([main/0, parse_range/1]).
 
 main() ->
     {ok, Fd} = file:read_file("./input"),
@@ -27,8 +27,8 @@ count_lights([H|T], Lights) ->
     case string:tokens(binary_to_list(H), " ,") of
         ["turn"|Rest] ->
             count_lights(T, switch_lights(lists:nth(1, Rest),
-                                                parse_range(lists:nthtail(1, Rest)),
-                                                Lights));
+                                          parse_range(lists:nthtail(1, Rest)),
+                                          Lights));
         ["toggle"|Rest] ->
             count_lights(T, toggle_lights(parse_range(Rest), Lights))
     end;
