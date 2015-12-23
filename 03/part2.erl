@@ -12,9 +12,8 @@
 -export([main/0]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    io:fwrite("Part 2: ~p~n", [deliver_robo_presents(Fd)]),
-    file:close(Fd).
+    {ok, Data} = file:read_file("./input"),
+    io:fwrite("Part 2: ~p~n", [deliver_robo_presents(Data)]).
 
 deliver_robo_presents(Pattern) ->
     {Santa, Robo} = binary_split_odds(Pattern),

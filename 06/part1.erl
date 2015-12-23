@@ -16,9 +16,8 @@
 -export([main/0, parse_range/1]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    Instructions = binary:split(Fd, <<"\n">>, [global, trim_all]),
-    file:close(Fd),
+    {ok, Data} = file:read_file("./input"),
+    Instructions = binary:split(Data, <<"\n">>, [global, trim_all]),
     io:fwrite("Part 1: ~p~n", [count_lights(Instructions)]).
 
 count_lights(Instructions) ->

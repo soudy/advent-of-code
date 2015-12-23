@@ -5,9 +5,8 @@
 -export([main/0]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    io:fwrite("Part 2: ~p~n", [find_basement(Fd)]),
-    file:close(Fd).
+    {ok, Data} = file:read_file("./input"),
+    io:fwrite("Part 2: ~p~n", [find_basement(Data)]).
 
 find_basement(L) ->
     find_basement(L, 0, 0).

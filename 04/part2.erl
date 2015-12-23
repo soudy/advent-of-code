@@ -4,7 +4,6 @@
 -export([main/0]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    Contents = binary:replace(Fd, <<"\n">>, <<>>),
-    file:close(Fd),
+    {ok, Data} = file:read_file("./input"),
+    Contents = binary:replace(Data, <<"\n">>, <<>>),
     io:fwrite("Part 2: ~p~n", [part1:mine_advent_coins(Contents, "000000")]).

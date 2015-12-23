@@ -19,14 +19,13 @@
 -export([main/0]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    init_circuits(Fd),
-    file:close(Fd),
+    {ok, Data} = file:read_file("./input"),
+    init_circuits(Data),
     io:fwrite("Part 1: ~p~n", [lookup("a")]).
 
 init_circuits(Operations) ->
     ets:new(circuits, [public, named_table]),
-    Circuits = [string:tokens(binary_to_list(Op), " ->") 
+    Circuits = [string:tokens(binary_to_list(Op), " ->")
                 || Op <- binary:split(Operations, <<"\n">>, [global, trim_all])],
     lists:foreach(fun(X) ->
         ets:insert(circuits, {lists:last(X), lists:droplast(X)})
@@ -34,10 +33,10 @@ init_circuits(Operations) ->
 
 lookup(Key) ->
     R = case string:to_integer(Key) of
-        {error, _} -> 
+        {error, _} ->
             case ets:lookup(circuits, Key) of
                 [{_, Val}] when is_integer(Val) -> Val;
-                [{_, Val}] when is_list(Val) -> 
+                [{_, Val}] when is_list(Val) ->
                     case Val of
                         [X]              -> lookup(X);
                         ["NOT", X]       -> bnot lookup(X);

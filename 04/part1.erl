@@ -11,9 +11,8 @@
 -export([main/0, mine_advent_coins/2]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    Contents = binary:replace(Fd, <<"\n">>, <<>>),
-    file:close(Fd),
+    {ok, Data} = file:read_file("./input"),
+    Contents = binary:replace(Data, <<"\n">>, <<>>),
     io:fwrite("Part 1: ~p~n", [mine_advent_coins(Contents, "00000")]).
 
 mine_advent_coins(Input, Match) ->

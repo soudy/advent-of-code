@@ -8,7 +8,7 @@ CRASHFILES=$(wildcard */erl_crash.dump)
 all: $(TARGETFILES)
 
 $(TARGETFILES): %: %.erl $(ERLFILES)
-	@erlc -o $(dir $@) $<
+	erlc -o $(dir $@) $<
 
 $(DAYS):
 	@erlc -o $@ $(wildcard $@*.erl)

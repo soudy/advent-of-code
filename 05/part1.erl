@@ -15,9 +15,8 @@
 -export([main/0, is_nice/1, re_bool/2]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    Lines = binary:split(Fd, <<"\n">>, [global, trim_all]),
-    file:close(Fd),
+    {ok, Data} = file:read_file("./input"),
+    Lines = binary:split(Data, <<"\n">>, [global, trim_all]),
     io:fwrite("Part 1: ~p~n", [nice_string_len(Lines)]).
 
 nice_string_len(Lines) ->

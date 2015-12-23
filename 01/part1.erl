@@ -13,9 +13,8 @@
 -export([main/0]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    io:fwrite("Part 1: ~p~n", [get_floor_level(Fd)]),
-    file:close(Fd).
+    {ok, Data} = file:read_file("./input"),
+    io:fwrite("Part 1: ~p~n", [get_floor_level(Data)]).
 
 get_floor_level(L) ->
     get_floor_level(L, 0).

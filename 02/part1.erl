@@ -16,9 +16,8 @@
 -export([main/0, parse_dimensions/1]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    Lines = binary:split(Fd, <<"\n">>, [global, trim_all]),
-    file:close(Fd),
+    {ok, Data} = file:read_file("./input"),
+    Lines = binary:split(Data, <<"\n">>, [global, trim_all]),
     io:fwrite("Part 1: ~p~n", [total_surface_area(Lines)]).
 
 total_surface_area(Lines) ->

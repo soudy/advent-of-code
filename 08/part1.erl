@@ -32,9 +32,8 @@
 -export([main/0]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    Strings = [binary_to_list(X) || X <- binary:split(Fd, <<"\n">>, 
-                                                      [global, trim_all])],
+    {ok, Data} = file:read_file("./input"),
+    Strings = [binary_to_list(X) || X <- binary:split(Data, <<"\n">>, [global, trim_all])],
     RealString = lists:foldl(fun(X, Sum) -> Sum + length(X) end, 0, Strings),
     EncString = lists:foldl(fun(X, Sum) -> Sum + enc_length(X) end, 0, Strings),
     io:fwrite("Part 1: ~p~n", [RealString - EncString]).

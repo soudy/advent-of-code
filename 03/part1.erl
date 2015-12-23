@@ -14,9 +14,8 @@
 -export([main/0, deliver_presents/1]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    io:fwrite("Part 1: ~p~n", [sets:size(deliver_presents(Fd))]),
-    file:close(Fd).
+    {ok, Data} = file:read_file("./input"),
+    io:fwrite("Part 1: ~p~n", [sets:size(deliver_presents(Data))]).
 
 deliver_presents(Pattern) ->
     deliver_presents(Pattern, 0, 0, sets:new()).

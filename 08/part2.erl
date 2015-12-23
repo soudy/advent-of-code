@@ -18,8 +18,8 @@
 -export([main/0, enc_length/1]).
 
 main() ->
-    {ok, Fd} = file:read_file("./input"),
-    Strings = [binary_to_list(X) || X <- binary:split(Fd, <<"\n">>, 
+    {ok, Data} = file:read_file("./input"),
+    Strings = [binary_to_list(X) || X <- binary:split(Data, <<"\n">>,
                                                       [global, trim_all])],
     RealStrings = lists:foldl(fun(X, Sum) -> Sum + length(X) end, 0, Strings),
     EncStrings = lists:foldl(fun(X, Sum) -> Sum + enc_length(X) end, 0, Strings),
