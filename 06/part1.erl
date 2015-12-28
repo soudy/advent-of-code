@@ -35,10 +35,11 @@ count_lights([], Lights) ->
     maps:size(Lights).
 
 parse_range(Instruction) ->
-    X1 = list_to_integer(lists:nth(1, Instruction)),
-    X2 = list_to_integer(lists:nth(2, Instruction)),
-    Y1 = list_to_integer(lists:nth(4, Instruction)),
-    Y2 = list_to_integer(lists:nth(5, Instruction)),
+    % Cut Instruction in the 4 pieces we're interested in: the positions 1, 2, 4
+    % and 5.
+    [X1, X2, Y1, Y2] = lists:map(fun(X) ->
+                                    list_to_integer(lists:nth(X, Instruction))
+                                 end, [1, 2, 4, 5]),
     [{X, Y} || X <- lists:seq(X1, Y1), Y <- lists:seq(X2, Y2)].
 
 toggle_lights([H|T], Lights) ->
