@@ -19,7 +19,7 @@
 %%%
 %%% What is the distance of the longest route?
 
--module(part1).
+-module(bothparts).
 -export([main/0]).
 
 main() ->
