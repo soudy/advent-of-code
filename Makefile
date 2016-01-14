@@ -1,4 +1,5 @@
 DAYS=$(wildcard */)
+DAY?=01 # default day for `run`
 ERLFILES=$(wildcard */*.erl)
 TARGETFILES=$(patsubst %.erl,%, $(ERLFILES))
 
@@ -13,7 +14,13 @@ $(TARGETFILES): %: %.erl $(ERLFILES)
 $(DAYS):
 	@erlc -o $@ $(wildcard $@*.erl)
 
+run: $(DAY)/
+	@echo "Running day $(DAY) answers..."
+	@cd $(DAY) && \
+		erl -run part1 main -run part2 main -run init stop -noshell 2> /dev/null || \
+		erl -run bothparts main -run init stop -noshell
+
 clean:
 	@rm -f $(BEAMFILES) $(CRASHFILES)
 
-.PHONY: all clean $(DAYS)
+.PHONY: all clean run $(DAYS)
